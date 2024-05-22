@@ -172,7 +172,7 @@ const Page = () => {
           todosToBeDisplayed.map((item, i) => {
             if (i !== 0) {
               return (
-                <div style={{borderColor: item.isImportant ? "#01579B":"gray"}} className="w-[600px] h-12 border-2 flex items-center justify-between px-4 mobile:w-[90%] rounded-lg">
+                <div style={{borderColor: item.isImportant ? "#01579B":"gray"}} key={i} className="w-[600px] h-12 border-2 flex items-center justify-between px-4 mobile:w-[90%] rounded-lg">
                   <h3 className="w-[80%] text-lg">{item.todo}</h3>
                   <div className="flex gap-x-2">
                     <MdDelete onClick={() => onClickDeleteHandler(i)} key={i} className="text-3xl text-red-600 cursor-pointer mobile:text-2xl hover:scale-110 transition-all ease-in-out duration-100" />
