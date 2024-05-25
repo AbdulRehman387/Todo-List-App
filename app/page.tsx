@@ -5,6 +5,9 @@ import { Input } from "@/components/ui/input"
 import { useState } from "react";
 import { MdDelete, MdEdit } from "react-icons/md";
 import { FaFilter } from "react-icons/fa";
+import * as React from "react"
+import { Moon, Sun } from "lucide-react"
+import { useTheme } from "next-themes"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,12 +23,13 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { IoSunnyOutline } from "react-icons/io5";
 
 const Page = () => {
+
+  const [theme1, setTheme1] = useState(false)
 
   const [todo, setTodo] = useState<todoType>({
     todo: "",
@@ -44,6 +48,8 @@ const Page = () => {
 
   const [checkbox1, setCheckBox1] = useState<boolean>(false)
   const [checkbox2, setCheckBox2] = useState<boolean>(false)
+
+  const { setTheme } = useTheme()
 
   const onChangeHandler = (event: any, name: string) => {
     if (event.target.name === "todo" || event.target.name === "checkbox1") {
@@ -76,14 +82,20 @@ const Page = () => {
     }
   }
   const onClickHandler = () => {
-    setTodos([...todos, todo])
-    setTodosToBeDisplayed([...todos, todo])
-    setCheckBox2(checkbox1)
-    setCheckBox1(false)
-    setTodo({
-      todo: "",
-      isImportant: false
-    })
+    if (todo.todo) {
+
+      setTodos([...todos, todo])
+      setTodosToBeDisplayed([...todos, todo])
+      setCheckBox2(checkbox1)
+      setCheckBox1(false)
+      setTodo({
+        todo: "",
+        isImportant: false
+      })
+    }
+    else {
+      alert("Please Enter a Todo!")
+    }
   }
   const onClickDeleteHandler = (index: number) => {
     setTodos(todos.filter((item, i) => (index !== i ? item : false)))
@@ -144,21 +156,25 @@ const Page = () => {
 
   return (
     <main className="flex flex-col items-center gap-y-8 px-5">
-      <h1 className="text-4xl font-extrabold mt-16">Todo List App</h1>
-      <div className="flex justify-center gap-x-5 w-full mt-5 mobile:gap-x-0">
-        <div className="flex flex-col gap-y-2">
-          <Input name="todo" onChange={(event: any) => onChangeHandler(event, "todo")} value={todo.todo} placeholder="Enter Your Todo" className="w-[500px] h-12 text-lg mobile:w-[80%] mobile:h-10" />
-          <div className="flex gap-x-2 items-center ml-2">
-            <input id="checkbox1" onClick={onClickCheckbox1} checked={checkbox1} name="checkbox1" type="checkbox" onChange={(event) => onChangeHandler(event, "todo")} className="h-4 w-4 accent-black" /><label className="font-semibold mobile:w-[150px]" htmlFor="checkbox1">Mark as Important</label>
+      <h1 className="text-4xl font-extrabold mt-16 text-center">Todo List App</h1>
+      <div className="flex justify-center gap-x-5 w-full mt-5 mobile:gap-x-0 mobile:flex-col mobile:items-center mobile:gap-y-5">
+        <div className="flex flex-col gap-y-2 mobile:w-full">
+          <Input name="todo" onChange={(event: any) => onChangeHandler(event, "todo")} value={todo.todo} placeholder="Enter Your Todo" className="w-[500px] h-12 text-lg mobile:w-[90%] mobile:h-10 mobile:mx-auto" />
+          <div className="flex gap-x-2 items-center ml-2 mobile:ml-[6vw]">
+            <input style={{ accentColor: theme1 ? "white" : "black" }} id="checkbox1" onClick={onClickCheckbox1} checked={checkbox1} name="checkbox1" type="checkbox" onChange={(event) => onChangeHandler(event, "todo")} className="h-4 w-4" /><label className="font-semibold mobile:w-[150px]" htmlFor="checkbox1">Mark as Important</label>
           </div>
         </div>
-        <Button onClick={onClickHandler} className="w-28 h-12 text-lg mobile:text-sm mobile:w-[22%] mobile:h-10">Add todo</Button>
+        <Button onClick={onClickHandler} className="w-28 h-12 text-lg mobile:text-sm mobile:w-[90%] mobile:h-10">Add todo</Button>
       </div>
-      <h2 className="text-3xl font-bold">My Todo List</h2>
-      <div className="w-[700px] bg-black h-1 mobile:w-[95%] mobile:px-1"></div>
-      <div className="w-[700px] flex justify-end relative bottom-2 mobile:w-[300px]">
+      <h2 className="text-3xl font-bold text-center">My Todo List</h2>
+      <div style={{ backgroundColor: !theme1 ? "black" : "white" }} className="w-[700px] h-1 mobile:w-[95%] mobile:px-1"></div>
+      <div className="w-[700px] flex justify-end gap-x-5 relative bottom-2 mobile:w-[95%]">
+        <div className="relative">
+          <Sun style={{ display: !theme1 ? "block" : "block" }} onClick={() => { setTheme("dark"); setTheme1(true) }} className="h-[2.3rem] w-[2.3rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 mobile:h-7 mobile:w-7 cursor-pointer" />
+          <Moon style={{ display: !theme1 ? "block" : "block" }} onClick={() => { setTheme("light"); setTheme1(false) }} className="absolute top-0 h-[2.3rem] w-[2.3rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 mobile:h-7 mobile:w-7 cursor-pointer" />
+        </div>
         <DropdownMenu>
-          <DropdownMenuTrigger><FaFilter className="text-3xl mobile:text-2xl hover:text-blue-900 hover:scale-[1.15] transition-all ease-in-out duration-100" /></DropdownMenuTrigger>
+          <DropdownMenuTrigger><FaFilter className="text-3xl mobile:text-2xl" /></DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem onClick={onClickAll} className="text-lg font-bold">All</DropdownMenuItem>
             <DropdownMenuItem onClick={onClickImportant} className="text-lg">Important</DropdownMenuItem>
@@ -172,7 +188,7 @@ const Page = () => {
           todosToBeDisplayed.map((item, i) => {
             if (i !== 0) {
               return (
-                <div style={{borderColor: item.isImportant ? "#01579B":"gray"}} key={i} className="w-[600px] h-12 border-2 flex items-center justify-between px-4 mobile:w-[90%] rounded-lg">
+                <div style={{ borderColor: item.isImportant ? "#01579B" : "gray" }} key={i} className="w-[600px] h-12 border-2 flex items-center justify-between px-4 mobile:w-[90%] rounded-lg">
                   <h3 className="w-[80%] text-lg">{item.todo}</h3>
                   <div className="flex gap-x-2">
                     <MdDelete onClick={() => onClickDeleteHandler(i)} key={i} className="text-3xl text-red-600 cursor-pointer mobile:text-2xl hover:scale-110 transition-all ease-in-out duration-100" />
@@ -203,7 +219,6 @@ const Page = () => {
           })
         }
       </div>
-
     </main>
   )
 }
