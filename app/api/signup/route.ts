@@ -1,11 +1,9 @@
 import { dbConnect } from "@/config/dbConfig"
 import { User } from "@/models/userModel"
-import { error } from "console"
-import { signIn } from "next-auth/react"
 
-dbConnect()
 
 export async function POST(req: any) {
+    dbConnect()
     const body = await req.json()
     const exists = await User.findOne({ "user.email": body.email })
     if (exists) {
