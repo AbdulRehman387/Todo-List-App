@@ -22,6 +22,7 @@ const handler = NextAuth({
             }
         })
     ],
+    secret: process.env.NEXTAUTH_SECRET,
     pages: {
         signIn: "/Login"
     },
@@ -38,6 +39,10 @@ const handler = NextAuth({
             }
             return token;
         },
+        async session({ session, token }) {
+            session.user.id = token.id;
+            return session;
+          }
     }
 
 })
