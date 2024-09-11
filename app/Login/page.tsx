@@ -23,6 +23,11 @@ const Login = () => {
         setError("")
         setUser({ ...user, [e.target.name]: e.target.value })
     }
+    const getsession = async()=>{
+        const session = getsession()
+        console.log(session);
+    }
+    getsession()
 
     const onClickHandler = async (e: any) => {
         setLoader(true)
