@@ -34,7 +34,7 @@ const Login = () => {
         
         if (result.ok) {
             console.log("after", session);
-            router.push("/")
+            window.location.href = '/'
         }
         else {
             setLoader(false)
