@@ -34,9 +34,6 @@ const Login = () => {
         
         if (result.ok) {
             console.log("after", session);
-            useEffect(()=>{
-                router.push("https://todo-list-app-git-main-abdul-rehmans-projects-c340dade.vercel.app")
-            },[])
         }
         else {
             setLoader(false)
