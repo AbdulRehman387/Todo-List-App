@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { PiEyeClosed, PiEye } from "react-icons/pi";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getSession, signIn } from "next-auth/react";
 import { before } from "node:test";
 
@@ -34,7 +34,9 @@ const Login = () => {
         
         if (result.ok) {
             console.log("after", session);
-            window.location.href = '/'
+            useEffect(()=>{
+                router.push("https://todo-list-app-git-main-abdul-rehmans-projects-c340dade.vercel.app")
+            },[])
         }
         else {
             setLoader(false)
