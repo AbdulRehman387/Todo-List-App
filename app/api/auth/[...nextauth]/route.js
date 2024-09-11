@@ -32,7 +32,13 @@ const handler = NextAuth({
         async redirect({ baseUrl }) {
             return baseUrl
         },
-    },
+        async jwt({ token, user }) {
+            if (user) {
+                token.id = user.id;
+            }
+            return token;
+        },
+    }
 
 })
 export { handler as GET, handler as POST }
