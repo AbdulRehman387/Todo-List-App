@@ -24,14 +24,6 @@ const Login = () => {
         setUser({ ...user, [e.target.name]: e.target.value })
     }
 
-    useEffect(() => {
-        const getsession = async () => {
-            const session = await getsession()
-            console.log(session);
-            getsession()
-        }
-        }, [])
-
 const onClickHandler = async (e: any) => {
     setLoader(true)
     const result: any = await signIn("credentials", {
@@ -42,6 +34,7 @@ const onClickHandler = async (e: any) => {
 
     if (result.ok) {
         console.log("after", session);
+        router.push("/")
     }
     else {
         setLoader(false)
