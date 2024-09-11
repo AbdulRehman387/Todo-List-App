@@ -5,7 +5,8 @@ import Link from "next/link"
 import { PiEyeClosed, PiEye } from "react-icons/pi";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { signIn } from "next-auth/react";
+import { getSession, signIn } from "next-auth/react";
+import { before } from "node:test";
 
 
 const Login = () => {
@@ -28,7 +29,11 @@ const Login = () => {
         const result: any = await signIn("credentials", {
             redirect: false, ...user
         })
+        const session = await getSession()
+        console.log("before", session);
+        
         if (result.ok) {
+            console.log("after", session);
             router.push("/")
         }
         else {
