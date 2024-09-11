@@ -26,7 +26,7 @@ const Login = () => {
 
     useEffect(() => {
         const getsession = async () => {
-            const session = getsession()
+            const session = await getsession()
             console.log(session);
             getsession()
         }
