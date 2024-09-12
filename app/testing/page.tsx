@@ -1,4 +1,5 @@
 import { getServerSession } from 'next-auth'
+import { getToken } from 'next-auth/jwt'
 import React from 'react'
 
 const Page = async() => {

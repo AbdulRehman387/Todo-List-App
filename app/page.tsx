@@ -31,14 +31,15 @@ import { getSession, signOut } from "next-auth/react";
 
 
 const Page = () => {
+  
   const [theme1, setTheme1] = useState(false)
   const { setTheme } = useTheme()
+  const router = useRouter()
 
-  const fetchSession = async () => {
-    const user = await getSession()
-    console.log(user);
-  }
-  fetchSession()
+    const fetchSession = async () => {
+      const session = await getSession()
+      return session
+    }
 
   const [todo, setTodo] = useState({
     content: "",
@@ -128,8 +129,10 @@ const Page = () => {
   }
 
 
-  const fetchTodos = () => {
-    fetch("/api/todos")
+  const fetchTodos = async() => {
+    // const session = await fetchSession()
+    // if (session) { 
+      fetch("/api/todos")
       .then(response => {console.log(response);return response.json()})
       .then((data) => {
         if (filter === "all") {
@@ -144,9 +147,13 @@ const Page = () => {
           setTodos(temp)
         }
       })
+    // }
+    // else{
+      // router.push("/Login")
+    // }
   }
   useEffect(() => {
-    fetchTodos()
+      fetchTodos()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter])
 
