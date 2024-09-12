@@ -22,7 +22,6 @@ const handler = NextAuth({
             }
         })
     ],
-    secret: process.env.NEXTAUTH_SECRET,
     pages: {
         signIn: "/Login"
     },
@@ -33,16 +32,6 @@ const handler = NextAuth({
         async redirect({ baseUrl }) {
             return baseUrl
         },
-        async jwt({ token, user }) {
-            if (user) {
-                token.id = user.id;
-            }
-            return token;
-        },
-        async session({ session, token }) {
-            session.user.id = token.id;
-            return session;
-          }
     }
 
 })

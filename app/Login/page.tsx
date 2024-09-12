@@ -4,9 +4,8 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { PiEyeClosed, PiEye } from "react-icons/pi";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { getSession, signIn } from "next-auth/react";
-import { before } from "node:test";
+import { useState } from "react";
+import { signIn } from "next-auth/react";
 
 
 const Login = () => {
@@ -29,11 +28,7 @@ const onClickHandler = async (e: any) => {
     const result: any = await signIn("credentials", {
         redirect: false, ...user
     })
-    const session = await getSession()
-    console.log("before", session);
-
     if (result.ok) {
-        console.log("after", session);
         router.push("/")
     }
     else {
