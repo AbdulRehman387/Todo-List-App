@@ -5,6 +5,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 
 dbConnect()
 const handler = NextAuth({
+    secret: process.env.NEXTAUTH_SECRET,
     providers: [
         CredentialsProvider({
             name: "credentials",
