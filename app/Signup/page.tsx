@@ -6,7 +6,7 @@ import { useState } from "react"
 import { PiEyeClosed, PiEye } from "react-icons/pi";
 import { useRouter } from "next/navigation"
 import { signIn } from "next-auth/react"
-import { object, string, number } from 'yup';
+import { object, string } from 'yup';
 
 const Signup = () => {
     const router = useRouter()
@@ -26,8 +26,6 @@ const Signup = () => {
         password: string().required("password is required").min(6, "password must be atleast 6 characters")
       });
       
-      // parse and assert validity
-
     const onChangeHandler = (e: any) => {
         setError("")
         setUser({ ...user, [e.target.name]: e.target.value })

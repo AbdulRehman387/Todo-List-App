@@ -1,6 +1,5 @@
 "use client"
 import { useRouter } from "next/navigation";
-import { todoType } from "./Types/componentsTypes";
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useState, useEffect } from "react";
@@ -26,20 +25,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { IoSunnyOutline } from "react-icons/io5";
 import { getSession, signOut } from "next-auth/react";
 
 
 const Page = () => {
-  
+
   const [theme1, setTheme1] = useState(false)
   const { setTheme } = useTheme()
-  const router = useRouter()
-
-    const fetchSession = async () => {
-      const session = await getSession()
-      return session
-    }
 
   const [todo, setTodo] = useState({
     content: "",
@@ -62,7 +54,6 @@ const Page = () => {
       content: e.target.value,
       isImportant: todo.isImportant
     })
-    console.log(todo);
   }
 
   const onChangeEditHandler = (e: any, index: number) => {
@@ -83,7 +74,7 @@ const Page = () => {
       body: JSON.stringify(todo)
     })
       .then(response => response.json())
-      .then(data => console.log(data))
+      .then(data => console.log(""))
       .catch(error => console.error('Error:', error));
     fetchTodos()
     setTodo({
@@ -102,7 +93,7 @@ const Page = () => {
       body: JSON.stringify(todos[index])
     })
       .then(response => response.json())
-      .then(data => console.log(data))
+      .then(data => console.log(""))
       .catch(error => console.error('Error:', error));
     fetchTodos()
   }
@@ -117,7 +108,7 @@ const Page = () => {
       body: JSON.stringify(editedTodo)
     })
       .then(response => response.json())
-      .then(data => { console.log(data); fetchTodos() })
+      .then(data => { console.log(""); fetchTodos() })
       .catch(error => console.error('Error:', error));
   }
 
@@ -129,11 +120,9 @@ const Page = () => {
   }
 
 
-  const fetchTodos = async() => {
-    // const session = await fetchSession()
-    // if (session) { 
-      fetch("/api/todos")
-      .then(response => {console.log(response);return response.json()})
+  const fetchTodos = async () => {
+    fetch("/api/todos")
+      .then(response => response.json())
       .then((data) => {
         if (filter === "all") {
           setTodos(data.todos)
@@ -147,13 +136,9 @@ const Page = () => {
           setTodos(temp)
         }
       })
-    // }
-    // else{
-      // router.push("/Login")
-    // }
   }
   useEffect(() => {
-      fetchTodos()
+    fetchTodos()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter])
 
