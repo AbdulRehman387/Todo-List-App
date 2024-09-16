@@ -65,6 +65,15 @@ const Page = () => {
   }
 
   const onClickAddHandler = (oper: string) => {
+    if (filter === "all") { 
+      setTodos([...todos, todo])
+    }
+    else if (filter === "important" && todo.isImportant === true) {
+      setTodos([...todos, todo])
+    }
+    else if (filter === "others" && todo.isImportant === false) {
+      setTodos([...todos, todo])
+    }
     fetch('/api/todos', {
       method: 'POST',
       headers: {
@@ -76,7 +85,6 @@ const Page = () => {
       .then(response => response.json())
       .then(data => console.log(""))
       .catch(error => console.error('Error:', error));
-    fetchTodos()
     setTodo({
       content: "",
       isImportant: false
@@ -84,6 +92,8 @@ const Page = () => {
   }
 
   const onClickDeleteHandler = (index: number) => {
+    const temp = todos.filter((item, i) => i !== index ? item : false)
+    setTodos(temp)
     fetch('/api/todos', {
       method: 'DELETE',
       headers: {
@@ -95,10 +105,18 @@ const Page = () => {
       .then(response => response.json())
       .then(data => console.log(""))
       .catch(error => console.error('Error:', error));
-    fetchTodos()
   }
 
   const onClickUpdateHandler = (index: number) => {
+    const temp = todos.map((item, i) => {
+      if (i === index) {
+        item.content = editedTodo.content,
+          item.isImportant = editedTodo.isImportant
+        return item
+      }
+      return item
+    })
+    setTodos(temp)
     fetch(`/api/todos?index=${index}`, {
       method: 'PUT',
       headers: {
@@ -108,7 +126,7 @@ const Page = () => {
       body: JSON.stringify(editedTodo)
     })
       .then(response => response.json())
-      .then(data => { console.log(""); fetchTodos() })
+      .then((data) => console.log(""))
       .catch(error => console.error('Error:', error));
   }
 
@@ -120,30 +138,36 @@ const Page = () => {
   }
 
 
-  const fetchTodos = async () => {
+  const filterTodos = async () => {
     fetch("/api/todos")
-      .then(response => response.json())
-      .then((data) => {
+      .then(res => res.json())
+      .then((res) => {
         if (filter === "all") {
-          setTodos(data.todos)
+          setTodos(res.todos)
         }
         else if (filter === "important") {
-          const temp = data.todos.filter((item: any) => item.isImportant ? item : false)
+          const temp = res.todos.filter((item: any) => item.isImportant ? item : false)
           setTodos(temp)
         }
         else if (filter === "others") {
-          const temp = data.todos.filter((item: any) => item.isImportant ? false : item)
+          const temp = res.todos.filter((item: any) => item.isImportant ? false : item)
           setTodos(temp)
         }
       })
   }
+  const getTodos = async () => {
+    fetch("/api/todos")
+      .then(res => res.json())
+      .then(res => setTodos(res.todos))
+  }
+
   useEffect(() => {
-    fetchTodos()
+    filterTodos()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter])
 
   useEffect(() => {
-    fetchTodos()
+    getTodos()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
